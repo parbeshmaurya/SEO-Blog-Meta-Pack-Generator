@@ -1,34 +1,33 @@
 # SEO-Blog-Meta-Pack-Generator
-Blog SEO Meta Pack Generator
-What It Is
+Generate complete SEO meta packs for blog posts in seconds.
 
-A tool that takes any blog post and automatically generates 11 SEO-optimized elements in one go:
+## What It Does
+- Blog title (SEO-optimized)
+- URL slug
+- H1 tag
+- OG title & description
+- Social media copy (Twitter, LinkedIn, Facebook)
+- JSON-LD schema markup
+- 5 primary keywords
+- 5 secondary keywords
 
-Blog title
-URL slug
-H1 tag
-OG title & description (for social sharing)
-Social media copy (Twitter, LinkedIn, Facebook)
-JSON-LD schema markup
-5 primary keywords
-5 secondary keywords
+## How to Use
+1. Paste your blog content (text, URL, Google Doc, or file)
+2. Run: "Generate SEO meta pack"
+3. Get chat summary + downloadable spreadsheet
 
-Output: Chat summary + downloadable spreadsheet ready for your CMS or team.
+## Input Formats
+- Pasted text
+- Google Doc links
+- File uploads (.txt, .md, .docx)
+- Live blog URLs
 
-Why You Need It
+## Output
+- Chat display
+- XLSX spreadsheet (ready for CMS)
 
-Without this skill, you manually:
-
-✗ Write titles, slugs, and H1s separately
-✗ Create different versions for each social platform
-✗ Research and list keywords by hand
-✗ Generate JSON-LD schema code
-✗ Organize everything in a spreadsheet
-✗ Do this for EVERY blog post across multiple clients
-
-That's 30-45 minutes per blog post.
-
-With this skill: 5 minutes. One prompt. Everything done.
+## For Multiple Clients
+Works across unlimited client blogs. Export each client's pack separately.
 
 How It Helps
 1. Saves Time
@@ -60,7 +59,4 @@ No guessing on title length or slug format
 Schema code ready to drop into <head>
 Keywords ready for your SEO tracking tool
 
-How to Use It (3 Steps)
-Paste your blog content (text, URL, Google Doc, or file)
-Run the skill (just ask me to generate the meta pack)
-Download the spreadsheet + use immediately
+
