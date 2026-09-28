@@ -1,218 +1,300 @@
 ---
-name: seo-meta-pack-generator
-description: Generate complete SEO meta packs for blog posts. Takes blog content (pasted text, Google Doc URL, file upload, or blog URL) and outputs blog title, URL slug, H1, OG title & description, social media copy (Twitter/LinkedIn/Facebook), JSON-LD schema markup, 5 primary keywords, and 5 secondary keywords. Outputs both chat summary and downloadable spreadsheet. Use this whenever creating new blog content or optimizing existing content for SEO across multiple clients.
-compatibility: Google Drive connector (optional), file upload, URL fetch
+name: real-time-google-rank-checker
+description: Check live Google organic rankings for a target domain and user-provided keywords using browser access. Records the actual organic position and exact ranking URL, and exports consolidated results to CSV.
 ---
 
-# SEO Meta Pack Generator
+# Real-Time Google Rank Checker
 
-Generates complete SEO-optimized meta information packs for blog posts in a single pass.
+## Purpose
 
-## What This Does
+Check the current Google organic ranking of a target domain for a user-provided list of keywords using live browser/Chrome access.
 
-Takes any blog content and generates:
-- **Blog Title** - SEO-optimized, 50-60 characters
-- **URL Slug** - Clean, keyword-friendly URL
-- **H1 Tag** - Main heading optimized for search
-- **OG Title** - Social sharing title (55-65 chars)
-- **OG Description** - Meta description (150-160 chars)
-- **Twitter Copy** - Tweet-ready copy with hashtags
-- **LinkedIn Copy** - Professional network post
-- **Facebook Copy** - Engaging social post
-- **Schema Markup** - JSON-LD structured data (BlogPosting)
-- **5 Primary Keywords** - Main search terms you should target
-- **5 Secondary Keywords** - Related long-tail & LSI variations
+The skill must inspect the actual Google search results for every supplied keyword and record the exact organic position and Ranking URL.
 
-## How to Use
+Never estimate rankings or substitute historical, third-party, or estimated ranking data.
 
-### Step 1: Provide Content
-Paste, upload, or link your blog content:
-- **Paste directly**: Raw text or markdown
-- **Google Doc**: Shareable link to your Google Doc
-- **File upload**: .txt, .md, .docx
-- **Blog URL**: Live URL if content is published (reads the page)
+## Required Inputs
 
-### Step 2: (Optional) Specify Intent
-- Primary keyword you want to target (if specific)
-- Blog category/vertical (optional, for tone)
-- Target audience (B2B, B2C, technical, general)
+Collect the following before starting:
 
-### Step 3: Output
-- Chat display of all meta tags + keywords
-- Downloadable XLSX spreadsheet ready to share or use in your CMS
+- Target domain
+- Country / location
+- Language
+- Device — Desktop or Mobile
+- Keywords
+- Ranking depth — Top 10, Top 50, Top 100, etc.
 
----
+If country/location, language, device, or ranking depth is missing, ask the user before starting.
 
-## Step-by-Step Process
+### Keyword Limit
 
-### 1. Parse Content
-Extract:
-- Main topic/theme
-- Key points and subtopics
-- Word count and depth
-- Any existing keywords mentioned
-- Target audience signals
+There is **no keyword limit**.
 
-### 2. Generate Blog Title
-- 50-60 characters (fits search snippets)
-- Include primary keyword naturally
-- Benefit-driven or curiosity-driven phrasing
-- Avoid clickbait, stay truthful to content
+The user may provide 10, 100, 500, 1,000+ or more keywords.
 
-**Template**: `[Primary Keyword]: [Benefit/Angle] [Qualifier if needed]`
+For large lists, process keywords in manageable batches internally, but always produce one consolidated final CSV.
 
-Example: `Email Marketing: Complete Guide for 2024`
+## Workflow
 
-### 3. Create URL Slug
-- All lowercase
-- Hyphens between words
-- No special characters or stopwords
-- 3-5 key words max
-- Derived from blog title
+For every supplied keyword:
 
-Example: `email-marketing-complete-guide-2024`
+1. Open Google using browser/Chrome access.
+2. Search the exact keyword.
+3. Use the specified country/location, language, and device.
+4. Inspect the live Google search results.
+5. Identify the first organic result belonging to the target domain.
+6. Record the actual organic position.
+7. Record the exact Ranking URL shown in Google.
+8. Ignore paid advertisements.
+9. Do not count non-organic SERP features as organic positions.
+10. If the target domain is not found within the requested ranking depth, record the appropriate not-ranking result.
+11. If the result cannot be reliably inspected, record `Unable to Verify`.
+12. Never estimate a ranking.
+13. Never use historical ranking data.
+14. Never use Ahrefs, Semrush, Google Search Console, or other third-party ranking data as a substitute.
+15. Check every supplied keyword.
 
-### 4. Write H1 Tag
-- Can be same or slightly different from title
-- Should match search intent
-- Include primary keyword once naturally
-- 8-10 words ideal
+## Organic Ranking Rules
 
-Example: `The Complete Email Marketing Guide for 2024`
+Only standard organic web results count toward the ranking position.
 
-### 5. OG Title & Description
-**OG Title** (55-65 chars):
-- Shorter, punchier version of blog title
-- Include primary keyword
-- Optimized for social click-through
+Do not count:
 
-**OG Description** (150-160 chars):
-- Summary of post value
-- Include 1-2 key benefits
-- Call-to-action oriented
+- Paid advertisements
+- AI Overviews
+- Featured Snippets
+- Local Packs / Maps
+- People Also Ask
+- Videos
+- Images
+- Shopping results
+- Knowledge Panels
+- Other SERP features
 
-### 6. Social Media Copy
-Generate 3 variations (one for each platform):
+Example:
 
-**Twitter** (280 chars max):
-- Hook + benefit + link call-to-action
-- Add 1-2 relevant hashtags
-- Conversational tone
+AI Overview → Not counted  
+Sponsored Result → Not counted  
+Featured Snippet → Not counted  
+Organic Result #1 → Position 1  
+Organic Result #2 → Position 2  
+Organic Result #3 → Position 3  
+People Also Ask → Not counted  
+Organic Result #4 → Position 4
 
-**LinkedIn** (1,300 chars max):
-- Professional angle
-- Value + credibility
-- Thought leadership tone
-- Include emoji sparingly
+If the target domain appears multiple times, record the first organic result belonging to that domain.
 
-**Facebook** (500 chars max):
-- Engaging, personal tone
-- Story-like opener
-- Question or curiosity hook
-- Link preview friendly
+## Domain Matching
 
-### 7. JSON-LD Schema
-Generate BlogPosting schema with:
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "[Blog Title]",
-  "description": "[OG Description]",
-  "url": "[Full Blog URL]",
-  "datePublished": "[Today's Date]",
-  "author": {
-    "@type": "Organization",
-    "name": "[Your Company/Name]"
-  },
-  "keywords": "[Keywords comma-separated]"
-}
-```
+Match results against the supplied target domain.
 
-Copy-paste ready for your blog's <head> section.
+For example, if the target domain is:
 
-### 8. Target Keywords
+`example.com`
 
-**5 Primary Keywords** (main search terms to target):
-- 1-2 word terms from blog topic
-- Extracted from content + topic analysis
-- Ranked by relevance to your content
-- Include search volume indicator (High/Medium/Low)
+Valid ranking URLs may include:
 
-Example for "Email Marketing Guide":
-1. Email marketing
-2. Email marketing guide
-3. Email marketing strategy
-4. B2B email marketing
-5. Email marketing best practices
+`https://example.com/`
 
-**5 Secondary Keywords** (related long-tail + LSI):
-- Longer, more specific search terms
-- Related intent variations
-- LSI (Latent Semantic Indexing) keywords
-- Lower competition, targeted traffic
+`https://example.com/products/`
 
-Example for same topic:
-1. How to create an email marketing campaign
-2. Email marketing tips for beginners
-3. Email marketing automation tools
-4. Effective email marketing techniques
-5. Email marketing ROI metrics
+`https://example.com/products/product-a/`
 
-Format in spreadsheet: One keyword per row with volume/difficulty notes.
+The Ranking URL must belong to the target domain.
 
----
+Do not replace a ranking URL with the homepage.
 
-## Output Spreadsheet Format
+Do not record a URL from another domain.
 
-| Field | Value | Notes |
-|-------|-------|-------|
-| Blog Title | [Generated Title] | 50-60 chars |
-| URL Slug | [slug-here] | For CMS |
-| H1 Tag | [H1 Heading] | Main heading |
-| OG Title | [OG Title] | Social sharing |
-| OG Description | [150-160 chars] | Meta description |
-| Twitter Copy | [Tweet] | 280 chars max |
-| LinkedIn Copy | [Professional post] | Engagement-focused |
-| Facebook Copy | [Social post] | Conversational |
-| Schema JSON | [JSON-LD code] | Copy to <head> |
-| Primary Keyword 1 | [Keyword] | High relevance |
-| Primary Keyword 2 | [Keyword] | High relevance |
-| Primary Keyword 3 | [Keyword] | High relevance |
-| Primary Keyword 4 | [Keyword] | High relevance |
-| Primary Keyword 5 | [Keyword] | High relevance |
-| Secondary Keyword 1 | [Long-tail keyword] | Related intent |
-| Secondary Keyword 2 | [Long-tail keyword] | Related intent |
-| Secondary Keyword 3 | [Long-tail keyword] | Related intent |
-| Secondary Keyword 4 | [Long-tail keyword] | Related intent |
-| Secondary Keyword 5 | [Long-tail keyword] | Related intent |
+## Ranking URL
 
----
+When the target domain ranks:
 
-## Tips for Best Results
+- Capture the exact URL of the first organic result.
+- Preserve the actual ranking page URL.
+- Do not substitute the homepage.
+- Do not use a different URL from the same website.
+- Do not infer the URL from the keyword or website structure.
 
-1. **Content Quality**: Clearer, more detailed blog content = better generated meta
-2. **Keyword Intent**: If you know your target keyword, mention it upfront
-3. **Audience**: Specify B2B vs B2C for tone/angle adjustments
-4. **Length**: Works best with 500+ word posts (more context = better output)
-5. **Review & Edit**: Always review generated copy—tweak for your brand voice
+The Ranking URL must come from the live Google result that was actually inspected.
 
----
+# Output
 
-## Common Tweaks You'll Make
+## Chat Summary
 
-- **Title too long?** Remove qualifier or benefit phrase
-- **Keywords not quite right?** Mention the specific keyword you want in your input
-- **Social copy too formal?** Ask for more conversational version
-- **OG description too generic?** Specify your unique angle upfront
+Keep the chat response to a concise summary only.
 
----
+Do not display the complete keyword-by-keyword ranking table in chat.
 
-## Multi-Client Workflow
+Example:
 
-1. Create one spreadsheet per client (or add column for client name)
-2. Re-run this skill for each blog post
-3. Export XLSX, share with client or CMS team
-4. Archive in client folder for reference
+Google Rank Check Complete
 
-Tag each row with client name or project for easy sorting.
+Target Domain: example.com  
+Keywords Checked: 250
+
+Top 3: 18  
+Top 10: 47  
+11–20: 39  
+21–50: 62  
+51–100: 41  
+Not in Top 100: 35  
+Unable to Verify: 8
+
+Complete ranking results have been exported to CSV.
+
+The summary must be calculated from the final ranking results.
+
+## CSV Output
+
+Generate **one consolidated CSV file** containing exactly one row for every supplied keyword.
+
+Use these columns only:
+
+| # | Keyword | Position | Ranking URL |
+|---:|---|---:|---|
+
+Example:
+
+| # | Keyword | Position | Ranking URL |
+|---:|---|---:|---|
+| 1 | medical alert system | 3 | https://example.com/medical-alert/ |
+| 2 | medical alert for seniors | 17 | https://example.com/senior-alert/ |
+| 3 | best medical alert system | 64 | https://example.com/ |
+| 4 | emergency alert system | Not in Top 100 | |
+| 5 | senior safety device | Unable to Verify | |
+
+## CSV Rules
+
+- There is no keyword limit.
+- Process every keyword supplied by the user.
+- Return exactly one row for every supplied keyword.
+- Preserve each keyword exactly as supplied.
+- Maintain the original keyword order.
+- Do not add keywords.
+- Do not remove keywords.
+- Do not silently skip keywords.
+- Record the first organic position where the target domain appears.
+- Record the exact Ranking URL shown in Google.
+- Ignore paid advertisements.
+- Ignore non-organic SERP features when counting positions.
+- If the target domain is not found within positions 1–100, write `Not in Top 100`.
+- If the Google result cannot be reliably inspected, write `Unable to Verify`.
+- Leave Ranking URL blank for `Not in Top 100` or `Unable to Verify`.
+- Never estimate a ranking.
+- Never use historical ranking data.
+- Never substitute third-party ranking data.
+
+## Position Rules
+
+Record the actual organic position number.
+
+Examples:
+
+`3`
+
+`7`
+
+`18`
+
+`46`
+
+`87`
+
+Do not record categories such as `Top 10` or `Top 50` in the Position column.
+
+When checking Top 100:
+
+- Position 1–100 → record the exact position.
+- Not found in positions 1–100 → `Not in Top 100`.
+- Result cannot be verified → `Unable to Verify`.
+
+If the user specifies another ranking depth, follow that requested depth.
+
+## Bulk Processing
+
+There is no keyword limit.
+
+For large keyword lists:
+
+1. Divide keywords into manageable internal batches.
+2. Use the same search settings for every batch.
+3. Check every supplied keyword.
+4. Maintain the original keyword order.
+5. Combine all results into one consolidated CSV.
+6. Do not create separate CSV files for individual batches.
+7. Do not ask the user to manually split the keyword list.
+
+The final CSV must contain exactly one row for every supplied keyword.
+
+## Quality Control
+
+Before delivering the final CSV, verify:
+
+1. CSV row count equals the number of supplied keywords.
+2. Every supplied keyword was processed.
+3. No keyword was silently skipped.
+4. No keyword was added.
+5. Keyword order is preserved.
+6. Every reported position was observed in live Google results.
+7. Every Ranking URL belongs to the target domain.
+8. Only organic results were counted.
+9. Paid advertisements were excluded.
+10. SERP features were excluded from organic position counting.
+11. Keywords outside the checked depth are correctly marked.
+12. Unverifiable results are marked `Unable to Verify`.
+13. No ranking was estimated.
+14. No historical ranking data was used.
+15. No third-party ranking data was substituted.
+16. Chat summary totals match the final CSV.
+
+## Error Handling
+
+### Google Search Blocked
+
+If Google blocks the search or prevents reliable inspection:
+
+`Unable to Verify`
+
+Do not guess or use another ranking source as a replacement.
+
+### Timeout / Page Loading Failure
+
+If the Google result cannot be reliably inspected:
+
+`Unable to Verify`
+
+### Domain Not Found
+
+If the target domain is not found within the requested ranking depth:
+
+`Not in Top 100`
+
+when checking Top 100.
+
+For another specified depth, use:
+
+`Not in Top [specified depth]`
+
+## Final Reporting
+
+The final response must contain:
+
+1. A concise ranking summary in chat.
+2. The generated CSV file.
+
+Do not reproduce the complete ranking dataset in chat.
+
+The ranking results represent the **live Google search environment at the time of the check**.
+
+Google rankings may vary based on:
+
+- Location
+- Language
+- Device
+- Personalization
+- Search settings
+- Google data centers
+- Time of search
+
+Only rankings that were actually observed and verified should be reported.
